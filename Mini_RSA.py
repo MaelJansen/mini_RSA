@@ -74,18 +74,59 @@ def create_keys():
     e  = random.randint(2,phin-1)
     while (pgcd(e, phin) != 1):
         e = random.randint(2, phin-1)
-    '''
-    le calcul de d
+    # le calcul de d
     d = 0
-    while d <= 0:
-        d = (int)(1/e)
-    '''
-    return [e,n],[p,q]
+    while d < 1 :
+        d = pow(e,-1,phin)
+    return [e,n], d
 
 PublicKey,PrivateKey = create_keys()
 print(PublicKey)
 print(PrivateKey)
 
 
-def encryptionPublicKey(message,publicKey):
-    return 0
+def encryptionPublicKey(message, publicKey):
+    return power(message, publicKey[0], publicKey[1])
+
+def decryption_public_key(publicKey, privateKey, message):
+    n = publicKey[1]
+    m = power(message, privateKey, n)
+    return m
+
+def signer_message(message, privateKey, publicKey):
+    return power(message, privateKey, publicKey[1])
+
+def empreinte():
+    return empreinte
+
+
+# Penser a faire un système pour convertir le message decrypté
+#  en chaine de caractères 
+m = 1200
+print("message : " + str(m))
+mcrypte = encryptionPublicKey(m, PublicKey)
+print("encryption : " + str(mcrypte))
+mdecrypte = decryption_public_key(PublicKey, PrivateKey, mcrypte)
+print("decryption : " + str(mdecrypte))
+print("signature : " + str(signer_message(m,PrivateKey,PublicKey)))
+
+
+
+AlicePublic, AlicePrivate = create_keys()
+CAPublic, CAPrivate = create_keys()
+Certificat = [CAPublic, CAPrivate]
+
+def comCA(empreinte, keypublic, keyprivate, Cpublic):
+    a = []
+    a.append(signer_message(empreinte,keyprivate,keypublic))
+    a.append(encryptionPublicKey(keypublic[0],Cpublic))
+    return a
+
+
+def CA(a, ca, ClePublicAlice):
+    CAPublic = ca[0]
+    CAPrivate = ca [1]
+    if decryption_public_key(ClePublicAlice,CAPrivate,a[2]) != ClePublicAlice :
+        return False
+    else: 
+        return False
