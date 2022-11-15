@@ -80,9 +80,6 @@ def create_keys():
         d = pow(e,-1,phin)
     return [e,n], d
 
-PublicKey,PrivateKey = create_keys()
-print(PublicKey)
-print(PrivateKey)
 
 def flatten_list(data,l):
     # iterating over the data
@@ -129,11 +126,6 @@ messageVerifie = decryption_public_key(alicePK, aliceprivK, message[0])
 hachemessageVerifie = empreinte(messageVerifie)
 if(hachemessageVerifie == message[1]): print("ça marche")
 
-
-
-AlicePublic, AlicePrivate = create_keys()
-CAPublic, CAPrivate = create_keys()
-Certificat = [CAPublic, CAPrivate]
 
 def com_CA(empreinte, keypublic, keyprivate, Cpublic):
     a = []
