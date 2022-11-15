@@ -84,13 +84,34 @@ PublicKey,PrivateKey = create_keys()
 print(PublicKey)
 print(PrivateKey)
 
+def flatten_list(data,l):
+    # iterating over the data
+    for element in data:
+        # checking for list
+        if type(element) == list:
+            # calling the same function with current element as new argument
+            a = flatten_list(element,l)
+        else:
+            a = element
+        l.append(a)
+    return l
 
 def encryptionPublicKey(message, publicKey):
-    return power(message, publicKey[0], publicKey[1])
+    rep = power(message, publicKey[0], publicKey[1])
+    if 1 < rep and rep < publicKey[1]:
+        return power(message, publicKey[0], publicKey[1])
+    else:
+        return flatten_list([encryptionPublicKey(rep/2, publicKey), encryptionPublicKey(rep/2, publicKey)])
 
 def decryption_public_key(publicKey, privateKey, message):
     n = publicKey[1]
-    m = power(message, privateKey, n)
+    a = 0
+    if type(message) == list :
+        for i in list(message):
+            a += i
+    else :
+        a = message    
+    m = power(a, privateKey, n)
     return m
 
 def signer_message(message, privateKey, publicKey):
