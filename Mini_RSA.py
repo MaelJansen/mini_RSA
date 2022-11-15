@@ -96,12 +96,12 @@ def flatten_list(data,l):
         l.append(a)
     return l
 
-def encryptionPublicKey(message, publicKey):
+def encryption_publicKey(message, publicKey):
     rep = power(message, publicKey[0], publicKey[1])
     if 1 < rep and rep < publicKey[1]:
         return power(message, publicKey[0], publicKey[1])
     else:
-        return flatten_list([encryptionPublicKey(rep/2, publicKey), encryptionPublicKey(rep/2, publicKey)])
+        return flatten_list([encryption_publicKey(rep/2, publicKey), encryption_publicKey(rep/2, publicKey)])
 
 def decryption_public_key(publicKey, privateKey, message):
     n = publicKey[1]
@@ -117,19 +117,17 @@ def decryption_public_key(publicKey, privateKey, message):
 def signer_message(message, privateKey, publicKey):
     return power(message, privateKey, publicKey[1])
 
-def empreinte():
-    return empreinte
+def empreinte(m):
+    return m*17%13
 
-
-# Penser a faire un système pour convertir le message decrypté
-#  en chaine de caractères 
 m = 1200
-print("message : " + str(m))
-mcrypte = encryptionPublicKey(m, PublicKey)
-print("encryption : " + str(mcrypte))
-mdecrypte = decryption_public_key(PublicKey, PrivateKey, mcrypte)
-print("decryption : " + str(mdecrypte))
-print("signature : " + str(signer_message(m,PrivateKey,PublicKey)))
+alice = create_keys()
+alicePK = alice[0]
+aliceprivK = alice[1]
+message  = (encryption_publicKey(m, alicePK),empreinte(m))
+messageVerifie = decryption_public_key(alicePK, aliceprivK, message[0])
+hachemessageVerifie = empreinte(messageVerifie)
+if(hachemessageVerifie == message[1]): print("ça marche")
 
 
 
@@ -137,10 +135,10 @@ AlicePublic, AlicePrivate = create_keys()
 CAPublic, CAPrivate = create_keys()
 Certificat = [CAPublic, CAPrivate]
 
-def comCA(empreinte, keypublic, keyprivate, Cpublic):
+def com_CA(empreinte, keypublic, keyprivate, Cpublic):
     a = []
     a.append(signer_message(empreinte,keyprivate,keypublic))
-    a.append(encryptionPublicKey(keypublic[0],Cpublic))
+    a.append(encryption_publicKey(keypublic[0],Cpublic))
     return a
 
 
