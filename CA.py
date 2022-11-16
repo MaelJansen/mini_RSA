@@ -17,10 +17,10 @@ class CA(User.User) :
     publicKey = None
     privateKey = None
 
-    def __init__(self, nb1, nb2) :
-        User.User.__init__(self, nb1, nb2)
+    def __init__(self) :
+        User.User.__init__(self)
     
-    def generateCertificate(self, mC, publicKey, footprintC) :
+    def generateCertificate(self, mC, footprintC, publicKey) :
         """
         Return the certificate if the footprint is the same as the decrypted version
 
@@ -36,16 +36,16 @@ class CA(User.User) :
             The footprint of the crypted messages
         """
         print("Le message crypté : " + str(mC))
-        footprintD = (self.decryption_publicKey(publicKey, publicKey[0], footprintC[0]),
-                        self.decryption_publicKey(publicKey, publicKey[0], footprintC[1]))
+        footprintD = (self.decryption(publicKey, publicKey[0], footprintC[0]),
+                        self.decryption(publicKey, publicKey[0], footprintC[1]))
         print("L'empreinte décryptée : " + str(footprintD))
-        mD = (self.decryption_publicKey(self.publicKey, self.privateKey, mC[0]),
-                self.decryption_publicKey(self.publicKey, self.privateKey, mC[1]))
+        mD = (self.decryption(self.publicKey, self.privateKey, mC[0]),
+                self.decryption(self.publicKey, self.privateKey, mC[1]))
         print("Le message décrypté : " + str(mD))
         footprint = (self.footprint(mD[0]), 
                         self.footprint(mD[1]))
         print("L'empreinte du message décrypté : " + str(footprint))
         if (footprint[0] == footprintD[0] and footprint[1] == footprintD[1]) :
-            return self.encryption_footprint(publicKey[0], self.publicKey, self.privateKey)
+            return self.encryption(publicKey[0], self.publicKey, self.privateKey)
         else :
             return None
