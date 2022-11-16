@@ -29,6 +29,7 @@ hachemessageVerifie = empreinte(messageVerifie)
 if(hachemessageVerifie == message[1]): print("ça marche")
 '''
 
+# Les variables pour vérifier l'état de fonctionnement du code
 alice = User.User()
 bob = User.User()
 ca = CA.CA()
@@ -36,9 +37,9 @@ print(alice.publicKey)
 #print(bob.publicKey)
 #print(ca.publicKey)
 message = int(input("Quel est votre message ?"))
-encryptMessage, aliceFootprint = User.User.encryption_publicKey(message, bob.publicKey), User.User.footprint(message)
+encryptMessage, aliceFootprint = User.User.encryption(message, bob.publicKey), User.User.footprint(message)
 print(encryptMessage)
-decryptMessage = User.User.decryption_publicKey(bob.publicKey, bob.privateKey, encryptMessage)
+decryptMessage = User.User.decryption_message(bob.publicKey, bob.privateKey, encryptMessage)
 print(decryptMessage)
 footprint = User.User.footprint(decryptMessage)
 if (footprint == aliceFootprint) :

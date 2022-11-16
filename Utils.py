@@ -1,4 +1,15 @@
 def power(a, e, n):
+    """
+    Return a^e mod n (including longint)
+
+    Parameters
+    ----------
+    a : int
+
+    e : int
+
+    n : int
+    """
     p = 1
     while e > 0:
         if e % 2 != 0:
@@ -8,6 +19,14 @@ def power(a, e, n):
     return p
 
 def test_prime(n):
+    """
+    Return true if n is a prime number
+
+    Parameters
+    ----------
+    n : int
+        The number that will be tested
+    """
     if n == 2 or n == 3:
         return True
     if n % 2 == 0 or n < 2:
@@ -18,6 +37,15 @@ def test_prime(n):
     return True
 
 def pgcd(u, v):
+    """
+    Return the greatest common divisor between u and v
+
+    Parameters
+    ----------
+    u : int
+
+    v : int
+    """
     while v:
         t = u
         u = v
@@ -28,10 +56,18 @@ def pgcd(u, v):
         return u
 
 def long_bezout(a, b):
+    """
+    Return the result of bezout's theorem : ax + by = pgcd(a,b)
+
+    Parameters
+    ----------
+    a : int
+
+    b : int
+    """
     # On sauvegarde les valeurs de a et b.
     a0 = a
     b0 = b
-
     # On laisse invariant p*a0 + q*b0 = a et  r*a0 + s*b0 = b.
     p = 1
     q = 0
@@ -49,10 +85,18 @@ def long_bezout(a, b):
         q = s
         r = nouveau_r
         s = nouveau_s
-
     return p  # on n'a besoin que de p
 
 def flatten_list(data, l):
+    """
+    Return the fusion between lists of lists
+
+    Parameters
+    ----------
+    data : 
+
+    l : 
+    """
     # iterating over the data
     for element in data:
         # checking for list
