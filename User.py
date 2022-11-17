@@ -52,7 +52,7 @@ class User :
         self.publicKey = [e, n]
         self.privateKey = d % phin
 
-    def encryption(self, message, e):
+    def encryption_decryption(self, message, e):
         """ 
         Return the encrypted message or the encrypted footprint
 
@@ -69,23 +69,18 @@ class User :
         """
         return Utils.power(message, e, self.publicKey[1])
 
-    def decryption(self, message, e):
-        """ 
-        Return the decrypted message
-
-        Parameters
-        ----------
-        public_key : [long, long]
-            The public_key (just n) to decrypt the message
-
-        private_key : long
-            The private_key to decrypt the message
-        
-        message :
-            The message that will be decrypted
-        """
-        return Utils.power(message, e, self.publicKey[1])
-
+    @staticmethod
+    def verifyCertificate(user, ca) :
+        if (user.certificate != None) :
+            decryptPublickey = (ca.encryption_decryption(user.certificate[0], ca.publicKey[0]), 
+                                ca.encryption_decryption(user.certificate[1], ca.publicKey[0]))
+            print("Le certificat décrypté : " + str(decryptPublickey))
+            if (user.publicKey[0] == decryptPublickey[0] and user.publicKey[1] == decryptPublickey[1]) :
+                return True
+            else :
+                return False
+        else :
+            return False
 
     @staticmethod
     def footprint(m):
@@ -97,6 +92,6 @@ class User :
         m : int
             The message that wille be hashed 
         """
-        h = hashlib.sha256(str(m).encode()).hexdigest()
+        h = hashlib.sha1(str(m).encode()).hexdigest()
         return int(h, base = 16) % (2**31 - 1)
 
