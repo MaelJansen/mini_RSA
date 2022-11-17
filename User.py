@@ -99,4 +99,4 @@ class User :
         """
         h = hashlib.sha256(str(m).encode()).hexdigest()
         return int(h, base = 16) % (2**31 - 1)
-        
+
