@@ -13,16 +13,21 @@ for i in range(nb) :
         ca = CA.CA()
 
     print("La clé à certifier : " + str(alice.publicKey))
+    print("la clé prive de alice : " + str(alice.privateKey))
 
-    cryptMessage = (ca.encryption(alice.publicKey[0], ca.publicKey[0]), 
-                    ca.encryption(alice.publicKey[1], ca.publicKey[0]))
+    cryptMessage = (ca.encryption_decryption(alice.publicKey[0], ca.publicKey[0]), 
+                    ca.encryption_decryption(alice.publicKey[1], ca.publicKey[0]))
     aliceFootprint = (User.User.footprint(alice.publicKey[0]), 
                         User.User.footprint(alice.publicKey[1]))
-    cryptAliceFootprint = (alice.encryption(aliceFootprint[0], alice.privateKey), 
-                    alice.encryption(aliceFootprint[1], alice.privateKey))
+    cryptAliceFootprint = (alice.encryption_decryption(aliceFootprint[0], alice.privateKey), 
+                    alice.encryption_decryption(aliceFootprint[1], alice.privateKey))
 
     alice.certificate = ca.generateCertificate(alice, cryptMessage, cryptAliceFootprint)
     print("La clé certifiée : " + str(alice.certificate))
+
+    print(bob.verifyCertificate(alice, ca))
+
+    print(" ")
 
     if (alice.certificate != None) :
         cpt += 1
