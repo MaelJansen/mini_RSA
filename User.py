@@ -14,8 +14,8 @@ private_key : long
 certificate : long
 """
 class User :
-    publicKey = None
-    privateKey = None
+    public_key = None
+    private_key = None
     certificate = None
 
     def __init__(self) :
@@ -49,8 +49,8 @@ class User :
         # choix de d
         d = Utils.long_bezout(e, phin)
 
-        self.publicKey = [e, n]
-        self.privateKey = d % phin
+        self.public_key = [e, n]
+        self.private_key = d % phin
 
     def encryption_decryption(self, message, e):
         """ 
@@ -61,26 +61,31 @@ class User :
         message : int
             The message that will be modified by the function
         
-        public_key : [long, long]
-            The public_key of the recipient
-
-        private_key : long
-            The private_key to encrypt the footprint
+        public_key[e] : long
+            The key of the recipient
         """
-        return Utils.power(message, e, self.publicKey[1])
+        return Utils.power(message, e, self.public_key[1])
 
     @staticmethod
-    def verifyCertificate(user, ca) :
+    def verify_certificate(user, ca) :
+        """ 
+        Return true if the certificate is valid
+
+        Parameters
+        ----------
+        user : User
+            The user who has his certificate tested
+
+        ca : CA
+            The CA 
+        """
         if (user.certificate != None) :
-            decryptPublickey = (ca.encryption_decryption(user.certificate[0], ca.publicKey[0]), 
-                                ca.encryption_decryption(user.certificate[1], ca.publicKey[0]))
-            print("Le certificat décrypté : " + str(decryptPublickey))
-            if (user.publicKey[0] == decryptPublickey[0] and user.publicKey[1] == decryptPublickey[1]) :
+            decrypt_public_key = (ca.encryption_decryption(user.certificate[0], ca.public_key[0]), 
+                                ca.encryption_decryption(user.certificate[1], ca.public_key[0]))
+            print("Le certificat décrypté : " + str(decrypt_public_key))
+            if (user.public_key[0] == decrypt_public_key[0] and user.public_key[1] == decrypt_public_key[1]) :
                 return True
-            else :
-                return False
-        else :
-            return False
+        return False
 
     @staticmethod
     def footprint(m):
@@ -90,7 +95,7 @@ class User :
         Parameters
         ----------
         m : int
-            The message that wille be hashed 
+            The message that will be hashed 
         """
         h = hashlib.sha1(str(m).encode()).hexdigest()
         return int(h, base = 16) % (2**31 - 1)

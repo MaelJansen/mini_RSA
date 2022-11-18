@@ -1,37 +1,26 @@
 import os
 import User
 import CA
+import Mini_RSA_Test as test
 
-cpt = 0
-nb = 100
+t = test.Unit_Test()
+t.test()
 
-for i in range(nb) :
-    alice = User.User()
-    bob = User.User()
-    ca = CA.CA()
-    while(ca.publicKey[0] < alice.publicKey[0] and ca.publicKey[1] < alice.publicKey[1]) :
-        ca = CA.CA()
+alice = User.User()
+bob = User.User()
+ca = CA.CA()
 
-    print("La clé à certifier : " + str(alice.publicKey))
-    print("la clé prive de alice : " + str(alice.privateKey))
+print("La clé à certifier : " + str(alice.public_key))
+print("la clé privée de Alice : " + str(alice.private_key))
 
-    cryptMessage = (ca.encryption_decryption(alice.publicKey[0], ca.publicKey[0]), 
-                    ca.encryption_decryption(alice.publicKey[1], ca.publicKey[0]))
-    aliceFootprint = (User.User.footprint(alice.publicKey[0]), 
-                        User.User.footprint(alice.publicKey[1]))
-    cryptAliceFootprint = (alice.encryption_decryption(aliceFootprint[0], alice.privateKey), 
-                    alice.encryption_decryption(aliceFootprint[1], alice.privateKey))
+cryptMessage = (ca.encryption_decryption(alice.public_key[0], ca.public_key[0]), 
+                    ca.encryption_decryption(alice.public_key[1], ca.public_key[0]))
+aliceFootprint = (User.User.footprint(alice.public_key[0]), 
+                        User.User.footprint(alice.public_key[1]))
+cryptAliceFootprint = (alice.encryption_decryption(aliceFootprint[0], alice.private_key), 
+                    alice.encryption_decryption(aliceFootprint[1], alice.private_key))
 
-    alice.certificate = ca.generateCertificate(alice, cryptMessage, cryptAliceFootprint)
-    print("La clé certifiée : " + str(alice.certificate))
+alice.certificate = ca.generate_certificate(alice, cryptMessage, cryptAliceFootprint)
+print("La clé certifiée : " + str(alice.certificate))
 
-    print(bob.verifyCertificate(alice, ca))
-
-    print(" ")
-
-    if (alice.certificate != None) :
-        cpt += 1
-
-print(" ")
-
-print("Taux de réussite du décryptage : " + str((cpt / nb) * 100) + "%")
+print(bob.verify_certificate(alice, ca))

@@ -27,24 +27,14 @@ def test_prime(n):
     n : int
         The number that will be tested
     """
-    """
-    if n == 2 or n == 3:
-        return True
-    if n % 2 == 0 or n < 2:
-        return False
-    for i in range(3, int(n**0.5) + 1, 2):
-        if n % i == 0:
-            return False
-    return True
-    """
     if(n==2 or n==3 or n==5 or n==7 or n ==11 or n== 13):
         return True
-    if((power(2,n-1,n)==1) and
-        (power(3,n-1,n)==1)and
-        (power(5,n-1,n)==1) and
-        (power(7,n-1,n)==1) and 
-        (power(11,n-1,n)==1) and
-        (power(13,n-1,n)==1)) :
+    if((power(2, n-1, n)==1) and
+        (power(3, n-1, n)==1)and
+        (power(5, n-1, n)==1) and
+        (power(7, n-1, n)==1) and 
+        (power(11, n-1, n)==1) and
+        (power(13, n-1, n)==1)) :
         return True
     return False
 
@@ -98,24 +88,3 @@ def long_bezout(a, b):
         r = nouveau_r
         s = nouveau_s
     return p  # on n'a besoin que de p
-
-def flatten_list(data, l):
-    """
-    Return the fusion between lists of lists
-
-    Parameters
-    ----------
-    data : 
-
-    l : 
-    """
-    # iterating over the data
-    for element in data:
-        # checking for list
-        if type(element) == list:
-            # calling the same function with current element as new argument
-            a = flatten_list(element, l)
-        else:
-            a = element
-        l.append(a)
-    return l
